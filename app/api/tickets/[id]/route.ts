@@ -38,3 +38,21 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   // update the db with the unique id and data
   return NextResponse.json(updateTicket);
 }
+
+export async function DELETE(request: NextRequest, { params }: Props) {
+  // find the ticket to delete
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  // check if there's no ticket, then return error msg with status 404
+  if (!ticket) {
+    return NextResponse.json({ error: "Ticket Not Found" }, { status: 404 });
+  }
+
+  await prisma.ticket.delete({
+    where: { id: ticket.id },
+  });
+
+  return NextResponse.json({ message: "Ticket Deleted" });
+}

@@ -1,6 +1,6 @@
-import { ticketSchema } from "@/ValidationSchemas/ticket";
-import prisma from "@/prisma/db";
+import { ticketPatchSchema } from "@/ValidationSchemas/ticket";
 import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/prisma/db";
 
 interface Props {
   params: { id: string };
@@ -8,7 +8,7 @@ interface Props {
 
 export async function PATCH(request: NextRequest, { params }: Props) {
   const body = await request.json();
-  const validation = ticketSchema.safeParse(body);
+  const validation = ticketPatchSchema.safeParse(body);
 
   // check if the has errors, then send message to user, with code 400
   if (!validation.success) {
@@ -24,6 +24,11 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   // check if there's no ticket, then return error mse with status 404
   if (!ticket) {
     return NextResponse.json({ error: "Ticket Not Found" }, { status: 404 });
+  }
+
+  // check if there is an assignedToUserId, then assign it.
+  if (body?.assignedToUserId) {
+    body.assignedToUserId = parseInt(body.assignedToUserId);
   }
 
   // if there is a ticket, then we need the id and data

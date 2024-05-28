@@ -7,7 +7,7 @@ interface Props {
 }
 
 const ViewTicket = async ({ params }: Props) => {
-  // checks the parseID is integer. letters will return null above
+  // checks that parseID is integer. letters will return null above
   const parseID = parseInt(params.id) ? parseInt(params.id) : null;
   let ticket;
 
@@ -17,11 +17,13 @@ const ViewTicket = async ({ params }: Props) => {
     });
   }
 
+  const users = await prisma.user.findMany();
+
   if (!ticket) {
-    return <p className=" text-destructive">Ticket Not Found!</p>;
+    return <p className="text-destructive">Ticket Not Found!</p>;
   }
 
-  return <TicketDetail ticket={ticket} />;
+  return <TicketDetail ticket={ticket} users={users} />;
 };
 
 export default ViewTicket;

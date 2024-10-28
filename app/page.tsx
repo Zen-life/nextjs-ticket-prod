@@ -6,16 +6,21 @@ import { getServerSession } from "next-auth";
 import options from "./api/auth/[...nextauth]/options";
 
 const Dashboard = async () => {
-  const session = await getServerSession(options);
+  // commentted out so when deploy to vercel it does not check if there's admin logged-in
+  // So now it will enable us to create a new user after deployment.
+  // Then we uncomment these pages (\app\page.tsx, \app\api\users\route.ts \app\users\page.tsx)
+  // and re-deploy.
 
-  // check if user is logged in as admin before displaying user page
-  if (!session) {
-    return (
-      <p className="text-destructive">
-        Login is required to view the Dashboard
-      </p>
-    );
-  }
+  // const session = await getServerSession(options);
+
+  // // check if user is logged in as admin before displaying user page
+  // if (!session) {
+  //   return (
+  //     <p className="text-destructive">
+  //       Login is required to view the Dashboard
+  //     </p>
+  //   );
+  // }
 
   const tickets = await prisma.ticket.findMany({
     where: {

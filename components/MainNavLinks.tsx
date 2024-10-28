@@ -12,7 +12,6 @@ function MainNavLinks({ role }: { role?: string }) {
   ];
 
   const currentPath = usePathname();
-  console.log("currentPath:", currentPath); // cmos
 
   return (
     <div className="flex items-center gap-2">
